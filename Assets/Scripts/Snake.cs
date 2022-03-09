@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class Snake : MonoBehaviour
 {
-    private Vector2 _direction = Vector2.right;
-    private List<Transform> _segments;
+    // GLOBAL VARS
+
     public Transform segmentPrefab;
+    private List<Transform> segments = new List<Transform>();
+    public Vector2 direction = Vector2.right;
+    private Vector2 input;
+    public int initSize = 6;
 
     private void Start()
     {
         // Segment Handeling
-        _segments = new List<Transform>();
-        _segments.Add(this.transform);
+        Death();
     }
 
 
@@ -25,36 +28,48 @@ public class Snake : MonoBehaviour
     // Might wanna replace this with Unity inputs later.
     private void ChangeDirection()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if(direction.x != 0f)
         {
-            _direction = Vector2.up;
-        }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                direction = Vector2.up;
+            }
             else if (Input.GetKeyDown(KeyCode.S))
             {
-                _direction = Vector2.down;
+                direction = Vector2.down;
             }
-                else if (Input.GetKeyDown(KeyCode.D))
-                {
-                    _direction = Vector2.right;
-                }
-                    else if (Input.GetKeyDown(KeyCode.A))
-                    {
-                        _direction = Vector2.left;
-                    }
+        }
+        else if(direction.y != 0f)
+        {
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                direction = Vector2.right;
+            }
+            else if (Input.GetKeyDown(KeyCode.A))
+            {
+                direction = Vector2.left;
+            }
+        }  
     }
 
     // Applies the actual movement to my snake, the Mathf is so that we wont get float numbers and we stay on grid.
     private void Movement()
     {
-        for(int i = _segments.Count -1; i > 0; i--)
+        if(input != Vector2.zero)
         {
-            _segments[i].transform.position = _segments[i].position;
+            direction = input;
         }
 
-        float posx = Mathf.Round(this.transform.position.x);
-        float posy = Mathf.Round(this.transform.position.y);
+        // Moving the tail.
+        for(int i = segments.Count -1; i > 0; i--)
+        {
+            segments[i].position = segments[i - 1].position;
+        }
+        // Moving the player.
+        float posx = Mathf.Round(transform.position.x) + direction.x;
+        float posy = Mathf.Round(transform.position.y) + direction.y;
 
-        this.transform.position = new Vector3(posx + _direction.x, posy + _direction.y, 0.0f);
+        transform.position = new Vector2(posx,posy);
 
 
     }
@@ -69,9 +84,29 @@ public class Snake : MonoBehaviour
     // Grows the snake. Spawns a segment on the position of the last segment ie the tail end.
     public void Grow()
     {
-        Transform segment = Instantiate(this.segmentPrefab);
-        segment.position = _segments[_segments.Count - 1].position;
-        _segments.Add(segment);
+        Transform segment = Instantiate(segmentPrefab);
+        segment.position = segments[segments.Count - 1].position;
+        segments.Add(segment);
+    }
+
+    public void Death()
+    {
+        direction = Vector2.right;
+        transform.position = Vector3.zero;
+
+        // Detroy the tail, leaving the head.
+        for(int i = 1; i < segments.Count; i++)
+        {
+            Destroy(segments[i].gameObject);
+        }
+
+        segments.Clear();
+        segments.Add(transform);
+
+        for(int i = 1; i < this.initSize; i++)
+        {
+            Grow();
+        }
     }
 
     // Calls Grow() when we hit food.
@@ -81,5 +116,9 @@ public class Snake : MonoBehaviour
         {
             Grow();
         }
+            else if(other.tag == "Wall")
+            {
+                Death();
+            }
     }
 }
