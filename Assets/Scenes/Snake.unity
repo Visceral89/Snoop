@@ -651,6 +651,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5550829524153364958, guid: 5361f333a7a50554481ec88080509d70, type: 3}
+      propertyPath: segmentPrefab
+      value: 
+      objectReference: {fileID: 5179891201494284333, guid: bcc27a4454ec81c489dd583fd94d8a44, type: 3}
     - target: {fileID: 2522998509559590179, guid: 5361f333a7a50554481ec88080509d70, type: 3}
       propertyPath: m_Name
       value: Snake
@@ -658,6 +662,18 @@ PrefabInstance:
     - target: {fileID: 2522998509559590179, guid: 5361f333a7a50554481ec88080509d70, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2522998509559590204, guid: 5361f333a7a50554481ec88080509d70, type: 3}
+      propertyPath: m_Color.b
+      value: 0.5058824
+      objectReference: {fileID: 0}
+    - target: {fileID: 2522998509559590204, guid: 5361f333a7a50554481ec88080509d70, type: 3}
+      propertyPath: m_Color.g
+      value: 0.9098039
+      objectReference: {fileID: 0}
+    - target: {fileID: 2522998509559590204, guid: 5361f333a7a50554481ec88080509d70, type: 3}
+      propertyPath: m_Color.r
+      value: 0.043137256
       objectReference: {fileID: 0}
     - target: {fileID: 2522998509559590205, guid: 5361f333a7a50554481ec88080509d70, type: 3}
       propertyPath: m_RootOrder
